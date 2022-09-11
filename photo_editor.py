@@ -40,6 +40,12 @@ class PyPhotoEditor:
         file_menu.add_command(label="Exit", command=self._close)
         menu_bar.add_cascade(label="File", menu=file_menu)
 
+        edit_menu = Menu(menu_bar, tearoff=0)
+
+        transform_menu = Menu(edit_menu, tearoff=0)
+
+        menu_bar.add_cascade(label='Edit', menu=edit_menu)
+
         self.root.configure(menu=menu_bar)
 
     def draw_widgets(self):
@@ -92,6 +98,16 @@ class PyPhotoEditor:
         self.image_tabs.forget(current_tab)
 
         self.add_new_image(new_path + new_ext)
+
+    def rotate_current_image(self, degrees):
+        current_tab = self.image_tabs.select()
+        if not current_tab:
+            return
+        tab_number = self.image_tabs.index(current_tab)
+
+        image = self.opened_images[tab_number][1]
+        image - image.rotate(degrees)
+        self.opened_images[tab_number][1] = image
 
     def _close(self, event=None):
         self.root.quit()
